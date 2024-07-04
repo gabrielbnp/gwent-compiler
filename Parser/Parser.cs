@@ -132,4 +132,9 @@ public class Parser
 
         return left;
     }
+
+    private Expr expr()
+    {
+        return equalityExpr();
+    }
 }
