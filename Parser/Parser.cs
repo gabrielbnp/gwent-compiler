@@ -47,9 +47,13 @@ public class Parser
             current++;
             return new LiteralExpr(tokens[current - 1].literal);
         }
-        else if(true) // if the tokens match a '('
+        else if( check(LEFT_PAREN) ) // if the tokens match a '('
         {
-
+            Expr expr = expression();
+            // throw an error if no right parenthesis is found
+            // ...
+            
+            return new GroupingExpr(expr);
         }
 
         return new LiteralExpr(null);
@@ -133,7 +137,7 @@ public class Parser
         return left;
     }
 
-    private Expr expr()
+    private Expr expression()
     {
         return equalityExpr();
     }

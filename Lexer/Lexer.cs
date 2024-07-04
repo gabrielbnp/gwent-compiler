@@ -210,7 +210,7 @@ public class Lexer
                 }
                 else
                 {
-                    Error.error(numline, "Expected &.", sourceCode);
+                    Error.error(numline, end - 1, "Expected &&.", sourceCode);
                 }
                 break;
 
@@ -222,7 +222,7 @@ public class Lexer
                 }
                 else
                 {
-                    Error.error(numline, "Expected ||.", sourceCode);
+                    Error.error(numline, end - 1, "Expected ||.", sourceCode);
                 }
                 break;
 
@@ -245,7 +245,7 @@ public class Lexer
 
                 if(foundQuote == false)
                 {
-                    Error.error(numline, "Expected \" character. Unterminated string.", sourceCode);
+                    Error.error(numline, end, "Expected \" character. Unterminated string.", sourceCode);
                 }
                 else
                 {
@@ -270,7 +270,7 @@ public class Lexer
                 }
                 else
                 {
-                    Error.error(numline, "Unexpected character.", sourceCode);
+                    Error.error(numline, end - 1, "Unexpected character.", sourceCode);
                 }
 
                 break;
