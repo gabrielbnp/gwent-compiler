@@ -1,4 +1,5 @@
 using System;
+using System.Security.Cryptography;
 using static TokenType;
 
 public class Parser
@@ -52,5 +53,83 @@ public class Parser
         }
 
         return new LiteralExpr(null);
+    }
+
+    private Expr unaryExpr()
+    {
+        if( check( new List<TokenType>{BANG, MINUS} ) )
+        {
+            Token oper = tokens[current];
+            current++;
+            Expr right = unaryExpr();
+
+            return new UnaryExpr(oper, right);
+        }
+
+        return primaryExpr();
+    }
+
+    private Expr factorExpr()
+    {
+        Expr left = unaryExpr();
+
+        while( check( new List<TokenType>{SLASH, STAR} ) )
+        {
+            current++;
+            Token oper = tokens[current - 1];
+            Expr right = unaryExpr();
+
+            left = new BinaryExpr(left, oper, right);
+        }
+
+        return left;
+    }
+
+    private Expr sumExpr()
+    {
+        Expr left = factorExpr();
+
+        while( check( new List<TokenType>{PLUS, MINUS} ) )
+        {
+            current++;
+            Token oper = tokens[current - 1];
+            Expr right = factorExpr();
+
+            left = new BinaryExpr(left, oper, right);
+        }
+
+        return left;
+    }
+
+    private Expr comparisonExpr()
+    {
+        Expr left = sumExpr();
+
+        while( check( new List<TokenType>{LESS, LESS_EQUAL, GREATER, GREATER_EQUAL} ) )
+        {
+            current++;
+            Token oper = tokens[current - 1];
+            Expr right = sumExpr();
+
+            left = new BinaryExpr(left, oper, right);
+        }
+
+        return left;
+    }
+
+    private Expr equalityExpr()
+    {
+        Expr left = comparisonExpr();
+
+        while( check( new List<TokenType>{BANG_EQUAL, EQUAL_EQUAL} ) )
+        {
+            current++;
+            Token oper = tokens[current - 1];
+            Expr right = comparisonExpr();
+
+            left = new BinaryExpr(left, oper, right);
+        }
+
+        return left;
     }
 }

@@ -24,8 +24,8 @@ public class LiteralExpr : Expr
 
 public class UnaryExpr : Expr
 {
-    public required Token oper;
-    public required Expr expr;
+    public Token oper;
+    public Expr expr;
 
     public UnaryExpr(Token oper, Expr expr)
     {
@@ -41,9 +41,9 @@ public class UnaryExpr : Expr
 
 public class BinaryExpr : Expr
 {
-    public required Expr left;
-    public required Expr right;
-    public required Token oper;
+    public Expr left;
+    public Expr right;
+    public Token oper;
 
     public BinaryExpr(Expr left, Token oper, Expr right)
     {
@@ -60,7 +60,7 @@ public class BinaryExpr : Expr
 
 public class GroupingExpr : Expr
 {
-    public required Expr expr;
+    public Expr expr;
 
     public GroupingExpr(Expr expr)
     {
