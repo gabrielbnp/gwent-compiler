@@ -1,16 +1,15 @@
 using System;
-using System.Linq.Expressions;
 
 public abstract class Expr
 {
     public abstract void accept(ExprVisitor v);
 }
 
-public class Literal : Expr
+public class LiteralExpr : Expr
 {
     public required object value;
 
-    public Literal(object value)
+    public LiteralExpr(object value)
     {
         this.value = value;
     }
@@ -21,12 +20,12 @@ public class Literal : Expr
     }
 }
 
-public class Unary : Expr
+public class UnaryExpr : Expr
 {
     public required Token oper;
     public required Expr expr;
 
-    public Unary(Token oper, Expr expr)
+    public UnaryExpr(Token oper, Expr expr)
     {
         this.oper = oper;
         this.expr = expr;
@@ -38,13 +37,13 @@ public class Unary : Expr
     }
 }
 
-public class Binary : Expr
+public class BinaryExpr : Expr
 {
     public required Expr left;
     public required Expr right;
     public required Token oper;
 
-    public Binary(Expr left, Token oper, Expr right)
+    public BinaryExpr(Expr left, Token oper, Expr right)
     {
         this.left = left;
         this.oper = oper;
@@ -57,11 +56,11 @@ public class Binary : Expr
     }
 }
 
-public class Grouping : Expr
+public class GroupingExpr : Expr
 {
     public required Expr expr;
 
-    public Grouping(Expr expr)
+    public GroupingExpr(Expr expr)
     {
         this.expr = expr;
     }
