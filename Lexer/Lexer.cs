@@ -86,8 +86,6 @@ public class Lexer
             }
         }
         
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
-
         return word;
     }
 

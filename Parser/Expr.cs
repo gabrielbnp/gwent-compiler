@@ -9,9 +9,9 @@ public abstract class Expr
 
 public class LiteralExpr : Expr
 {
-    public required object value;
+    public object? value;
 
-    public LiteralExpr(object value)
+    public LiteralExpr(object? value)
     {
         this.value = value;
     }
