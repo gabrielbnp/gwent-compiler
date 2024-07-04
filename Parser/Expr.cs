@@ -1,8 +1,9 @@
 using System;
+using System.Linq.Expressions;
 
 public abstract class Expr
 {
-
+    public abstract void accept(ExprVisitor v);
 }
 
 public class Literal : Expr
@@ -12,6 +13,11 @@ public class Literal : Expr
     public Literal(object value)
     {
         this.value = value;
+    }
+
+    public override void accept(ExprVisitor v)
+    {
+        v.visit(this);
     }
 }
 
@@ -25,6 +31,11 @@ public class Unary : Expr
         this.oper = oper;
         this.expr = expr;
     }
+
+    public override void accept(ExprVisitor v)
+    {
+        v.visit(this);
+    }
 }
 
 public class Binary : Expr
@@ -36,8 +47,13 @@ public class Binary : Expr
     public Binary(Expr left, Token oper, Expr right)
     {
         this.left = left;
-        this.right = right;
         this.oper = oper;
+        this.right = right;
+    }
+
+    public override void accept(ExprVisitor v)
+    {
+        v.visit(this);
     }
 }
 
@@ -48,5 +64,10 @@ public class Grouping : Expr
     public Grouping(Expr expr)
     {
         this.expr = expr;
+    }
+
+    public override void accept(ExprVisitor v)
+    {
+        v.visit(this);
     }
 }
