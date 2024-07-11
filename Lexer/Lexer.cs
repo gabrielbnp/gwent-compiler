@@ -71,7 +71,7 @@ public class Lexer
 
         if ( isAlpha(sourceCode[start]) ) // possible identifier or keyword detected
         {
-            while( (end <= sourceCode.Length - 2) && ( isAlpha(sourceCode[end]) ) )
+            while( (end <= sourceCode.Length - 2) && isAlpha(sourceCode[end] ) )
             {
                 word += sourceCode[end];
                 end++;
@@ -79,7 +79,7 @@ public class Lexer
         }
         else if( isDigit(sourceCode[start]) ) // possible number detected
         {
-            while( (end <= sourceCode.Length - 2) && ( isDigit(sourceCode[end]) ) )
+            while( (end <= sourceCode.Length - 2) && isDigit(sourceCode[end] ) )
             {
                 word += sourceCode[end];
                 end++;
@@ -91,7 +91,7 @@ public class Lexer
 
     private void addToken(TokenType type, string lexeme, object? literal)
     {
-        tokens.Add( new Token(type, lexeme, literal, numline) );
+        tokens.Add( new Token(type, lexeme, literal, numline, start, sourceCode) );
     }
 
     private bool isKeyword(string possibleKeyWord)
@@ -210,7 +210,7 @@ public class Lexer
                 }
                 else
                 {
-                    Error.error(numline, end - 1, "Expected &&.", sourceCode);
+                    Error.error(numline, end - 1, sourceCode, "Expected &&.");
                 }
                 break;
 
@@ -222,7 +222,7 @@ public class Lexer
                 }
                 else
                 {
-                    Error.error(numline, end - 1, "Expected ||.", sourceCode);
+                    Error.error(numline, end - 1, sourceCode, "Expected ||.");
                 }
                 break;
 
@@ -232,6 +232,7 @@ public class Lexer
                 else
                     addToken(SLASH, "/", null);
                 break;
+                
             case "\"":
                 bool foundQuote = false;
 
@@ -245,7 +246,7 @@ public class Lexer
 
                 if(foundQuote == false)
                 {
-                    Error.error(numline, end, "Expected \" character. Unterminated string.", sourceCode);
+                    Error.error(numline, end, sourceCode, "Expected \" character. Unterminated string.");
                 }
                 else
                 {
@@ -270,7 +271,7 @@ public class Lexer
                 }
                 else
                 {
-                    Error.error(numline, end - 1, "Unexpected character.", sourceCode);
+                    Error.error(numline, end - 1, sourceCode, "Invalid character.");
                 }
 
                 break;

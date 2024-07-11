@@ -2,16 +2,23 @@ using System;
 
 public class Error
 {
-    public static void error(int line, int column, string message, string? sourceCode)
+    public static void error(int line, int column, string? sourceCode, string errorMessage)
     {
-        report(line, column, message, sourceCode);
+        report(line, column, sourceCode, errorMessage);
 
         Compiler.hadError = true;
     }
 
-    private static void report(int line, int column,string message, string? sourceCode)
+    public static void error(Token token, string errorMessage)
     {
-        Console.WriteLine("\nError in line {0}: {1}", line, message);
+        report(token.numLine, token.numColumn, token.sourceCode, errorMessage);
+
+        Compiler.hadError = true;
+    }
+
+    private static void report(int line, int column, string? sourceCode, string errorMessage)
+    {
+        Console.WriteLine("\nError in line {0}: {1}", line, errorMessage);
         Console.WriteLine('\t' + sourceCode);
         
         string here = "\t";

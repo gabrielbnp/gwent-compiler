@@ -1,4 +1,4 @@
-public interface ExprVisitor
+public interface IExprVisitor
 {
     public void visit(LiteralExpr literalExpr);
     public void visit(UnaryExpr unaryExpr);

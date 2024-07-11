@@ -1,3 +1,6 @@
+using System.Dynamic;
+using System.Security.Cryptography.X509Certificates;
+
 public enum TokenType
 {
     // single-character tokens
@@ -24,14 +27,20 @@ public class Token
     public string lexeme;
     public object? literal;
     
-    protected int numline;
+    // to locate the token in the source code
+    public int numLine { get; private set; }
+    public int numColumn { get; private set; }
+    public string sourceCode { get; private set; }
 
-    public Token(TokenType type, string lexeme, object? literal, int numline)
+    public Token(TokenType type, string lexeme, object? literal, int numLine, int numColumn, string sourceCode)
     {
         this.type = type;
         this.lexeme = lexeme;
         this.literal = literal;
-        this.numline = numline;
+
+        this.numLine = numLine;
+        this.numColumn = numColumn;
+        this.sourceCode = sourceCode;
     }
 
     public override string ToString()

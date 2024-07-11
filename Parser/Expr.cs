@@ -1,10 +1,9 @@
 using System;
 
-
 // classes for defining the expressions
 public abstract class Expr
 {
-    public abstract void accept(ExprVisitor v);
+    public abstract void accept(IExprVisitor v);
 }
 
 public class LiteralExpr : Expr
@@ -16,7 +15,7 @@ public class LiteralExpr : Expr
         this.value = value;
     }
 
-    public override void accept(ExprVisitor v)
+    public override void accept(IExprVisitor v)
     {
         v.visit(this);
     }
@@ -33,7 +32,7 @@ public class UnaryExpr : Expr
         this.expr = expr;
     }
 
-    public override void accept(ExprVisitor v)
+    public override void accept(IExprVisitor v)
     {
         v.visit(this);
     }
@@ -52,7 +51,7 @@ public class BinaryExpr : Expr
         this.right = right;
     }
 
-    public override void accept(ExprVisitor v)
+    public override void accept(IExprVisitor v)
     {
         v.visit(this);
     }
@@ -67,7 +66,7 @@ public class GroupingExpr : Expr
         this.expr = expr;
     }
 
-    public override void accept(ExprVisitor v)
+    public override void accept(IExprVisitor v)
     {
         v.visit(this);
     }
