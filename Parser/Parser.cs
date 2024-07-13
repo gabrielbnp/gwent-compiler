@@ -46,6 +46,7 @@ public class Parser
         }
         else if( match(LEFT_PAREN) ) // if the tokens match a '('
         {
+            current++;
             Expr<object> expr = expression();
 
             // throw an error if no right parenthesis is found
@@ -124,5 +125,15 @@ public class Parser
     private Expr<object> expression()
     {
         return comparison();
+    }
+
+    // Panic mode error recovery
+
+    private void check(TokenType type, string errorMessage)
+    {
+        if( match(type) )
+            current++;
+        else
+            Error.error(tokens[current], errorMessage);
     }
 }
