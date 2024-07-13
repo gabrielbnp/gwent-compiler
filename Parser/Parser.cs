@@ -49,7 +49,7 @@ public class Parser
             current++;
             Expr<object> expr = expression();
 
-            // throw an error if no right parenthesis is found
+            check(RIGHT_PAREN, "Expected ) character after expression.");
 
             return new GroupingExpr<object>(expr);
         }
