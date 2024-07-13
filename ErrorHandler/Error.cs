@@ -22,7 +22,10 @@ public class Error
         Console.WriteLine('\t' + sourceCode);
         
         string here = "\t";
-        for(int i = 0; i < sourceCode?.Length; i++)
+
+        int? length = sourceCode?.Length - (column == sourceCode?.Length - 1 ? 0 : 1);
+
+        for(int i = 0; i < length; i++)
         {
             if(i == column)
                 here += "^";
