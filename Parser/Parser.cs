@@ -1,27 +1,24 @@
-using System;
-using System.Security.Cryptography;
 using static TokenType;
 
 public class Parser
 {
     private List<Token> tokens;
 
-    private int current = 0;
-
     public Parser(List<Token> tokens)
     {
-        tokens.Add( new Token(NULL, "", null, 0) );
         this.tokens = tokens;
     }
 
-    private Boolean check(TokenType type)
+    private int current = 0; // token currently being read from List<Token> tokens
+
+    private Boolean match(TokenType t)
     {
-        return tokens[current].type == type;
+        return tokens[current].type == t;
     }
 
-    private Boolean check(List<TokenType> type)
+    private Boolean match(TokenType[] types)
     {
-        foreach(TokenType t in type)
+        foreach(TokenType t in types)
         {
             if(tokens[current].type == t)
                 return true;
@@ -30,115 +27,102 @@ public class Parser
         return false;
     }
 
-    private Expr primaryExpr()
+    private Expr<object> primary()
     {
-        if( check(TRUE) )
+        if( match(TRUE) )
         {
             current++;
-            return new LiteralExpr(false);
+            return new LiteralExpr<object>(true);
         }
-        else if( check(FALSE) )
+        else if( match(FALSE) )
         {
             current++;
-            return new LiteralExpr(true);
+            return new LiteralExpr<object>(false);
         }
-        else if( check(new List<TokenType>{NUMBER, STRING} ) )
+        else if( match( new TokenType[] {NUMBER, STRING} ) )
         {
             current++;
-            return new LiteralExpr(tokens[current - 1].literal);
+            return new LiteralExpr<object>( tokens[current - 1].literal );
         }
-        else if( check(LEFT_PAREN) ) // if the tokens match a '('
+        else if( match(LEFT_PAREN) ) // if the tokens match a '('
         {
-            Expr expr = expression();
+            Expr<object> expr = expression();
+
             // throw an error if no right parenthesis is found
-            // ...
-            
-            return new GroupingExpr(expr);
+
+            return new GroupingExpr<object>(expr);
         }
 
-        return new LiteralExpr(null);
+        return new LiteralExpr<object>(null);
     }
 
-    private Expr unaryExpr()
+    private Expr<object> unary()
     {
-        if( check( new List<TokenType>{BANG, MINUS} ) )
+        if( match( new TokenType[] {BANG, MINUS} ) )
         {
             Token oper = tokens[current];
             current++;
-            Expr right = unaryExpr();
+            Expr<object> right = unary();
 
-            return new UnaryExpr(oper, right);
+            return new UnaryExpr<object>(oper, right);
         }
 
-        return primaryExpr();
+        return primary();
     }
 
-    private Expr factorExpr()
+    private Expr<object> factor()
     {
-        Expr left = unaryExpr();
+        Expr<object> left = unary();
 
-        while( check( new List<TokenType>{SLASH, STAR} ) )
+        while( match( new TokenType[] {SLASH, STAR} ) )
         {
+            Token oper = tokens[current];
             current++;
-            Token oper = tokens[current - 1];
-            Expr right = unaryExpr();
 
-            left = new BinaryExpr(left, oper, right);
+            Expr<object> right = unary();
+
+            left = new BinaryExpr<object>(left, oper, right);
         }
 
         return left;
     }
 
-    private Expr sumExpr()
+    private Expr<object> sum()
     {
-        Expr left = factorExpr();
+        Expr<object> left = factor();
 
-        while( check( new List<TokenType>{PLUS, MINUS} ) )
+        while( match( new TokenType[] {PLUS, MINUS, PLUS_STR} ) )
         {
+            Token oper = tokens[current];
             current++;
-            Token oper = tokens[current - 1];
-            Expr right = factorExpr();
 
-            left = new BinaryExpr(left, oper, right);
+            Expr<object> right = factor();
+
+            left = new BinaryExpr<object>(left, oper, right);
         }
 
         return left;
     }
 
-    private Expr comparisonExpr()
+    private Expr<object> comparison()
     {
-        Expr left = sumExpr();
+        Expr<object> left = sum();
 
-        while( check( new List<TokenType>{LESS, LESS_EQUAL, GREATER, GREATER_EQUAL} ) )
+        while( match( new TokenType[] {EQUAL_EQUAL, BANG_EQUAL, LESS, LESS_EQUAL, GREATER, GREATER_EQUAL} ) )
         {
+            Token oper = tokens[current];
             current++;
-            Token oper = tokens[current - 1];
-            Expr right = sumExpr();
 
-            left = new BinaryExpr(left, oper, right);
+            Expr<object> right = sum();
+
+            left = new BinaryExpr<object>(left, oper, right);
         }
 
         return left;
     }
 
-    private Expr equalityExpr()
+    private Expr<object> expression()
     {
-        Expr left = comparisonExpr();
-
-        while( check( new List<TokenType>{BANG_EQUAL, EQUAL_EQUAL} ) )
-        {
-            current++;
-            Token oper = tokens[current - 1];
-            Expr right = comparisonExpr();
-
-            left = new BinaryExpr(left, oper, right);
-        }
-
-        return left;
-    }
-
-    private Expr expression()
-    {
-        return equalityExpr();
+        return comparison();
     }
 }
