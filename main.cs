@@ -43,7 +43,9 @@ public class Compiler
     {
         Lexer Scanner = new Lexer(sourceCode, numline);
 
-        foreach(Token token in Scanner.tokens)
+        List<Token> tokens = Scanner.tokens;
+
+        foreach(Token token in tokens)
         {
             Console.WriteLine(token);
         }

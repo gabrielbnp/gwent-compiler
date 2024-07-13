@@ -15,7 +15,7 @@ public enum TokenType
     // keywords
     BOOL, TRUE, FALSE, IF, ELSE, FOR, IN, WHILE,
 
-    NULL
+    EOF
 };
 
 public class Token
