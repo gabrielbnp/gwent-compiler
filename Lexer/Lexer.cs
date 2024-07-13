@@ -41,7 +41,7 @@ public class Lexer
 
     // functions to help tokenizeCode()
 
-    private char  nextChar { get { return sourceCode[end]; } }
+    private char nextChar { get { return sourceCode[end]; } }
 
     private bool isAlpha(char c)
     {

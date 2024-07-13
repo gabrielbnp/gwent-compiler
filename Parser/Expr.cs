@@ -1,12 +1,12 @@
 using System;
 
 // classes for defining the expressions
-public abstract class Expr
+public abstract class Expr<T>
 {
-    public abstract void accept(IExprVisitor v);
+    public abstract T accept(IExprVisitor<T> v);
 }
 
-public class LiteralExpr : Expr
+public class LiteralExpr<T> : Expr<T>
 {
     public object? value;
 
@@ -15,59 +15,60 @@ public class LiteralExpr : Expr
         this.value = value;
     }
 
-    public override void accept(IExprVisitor v)
+    public override T accept(IExprVisitor<T> v)
     {
-        v.visit(this);
+        return v.visit(this);
     }
 }
 
-public class UnaryExpr : Expr
+
+public class UnaryExpr<T> : Expr<T>
 {
     public Token oper;
-    public Expr expr;
+    public Expr<T> expr;
 
-    public UnaryExpr(Token oper, Expr expr)
+    public UnaryExpr(Token oper, Expr<T> expr)
     {
         this.oper = oper;
         this.expr = expr;
     }
 
-    public override void accept(IExprVisitor v)
+    public override T accept(IExprVisitor<T> v)
     {
-        v.visit(this);
+        return v.visit(this);
     }
 }
 
-public class BinaryExpr : Expr
+public class BinaryExpr<T> : Expr<T>
 {
-    public Expr left;
-    public Expr right;
+    public Expr<T> left;
+    public Expr<T> right;
     public Token oper;
 
-    public BinaryExpr(Expr left, Token oper, Expr right)
+    public BinaryExpr(Expr<T> left, Token oper, Expr<T> right)
     {
         this.left = left;
         this.oper = oper;
         this.right = right;
     }
 
-    public override void accept(IExprVisitor v)
+    public override T accept(IExprVisitor<T> v)
     {
-        v.visit(this);
+        return v.visit(this);
     }
 }
 
-public class GroupingExpr : Expr
+public class GroupingExpr<T> : Expr<T>
 {
-    public Expr expr;
+    public Expr<T> expr;
 
-    public GroupingExpr(Expr expr)
+    public GroupingExpr(Expr<T> expr)
     {
         this.expr = expr;
     }
 
-    public override void accept(IExprVisitor v)
+    public override T accept(IExprVisitor<T> v)
     {
-        v.visit(this);
+        return v.visit(this);
     }
 }

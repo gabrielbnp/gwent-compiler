@@ -1,7 +1,7 @@
-public interface IExprVisitor
+public interface IExprVisitor<T>
 {
-    public void visit(LiteralExpr literalExpr);
-    public void visit(UnaryExpr unaryExpr);
-    public void visit(BinaryExpr binaryExpr);
-    public void visit(GroupingExpr groupExpr);
+    public T visit(LiteralExpr<T> literalExpr);
+    public T visit(UnaryExpr<T> unaryExpr);
+    public T visit(BinaryExpr<T> binaryExpr);
+    public T visit(GroupingExpr<T> groupExpr);
 }
