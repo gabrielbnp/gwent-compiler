@@ -54,6 +54,8 @@ public class Parser
             return new GroupingExpr<object>(expr);
         }
 
+
+        Error.error(new Token(EOF, "", null, tokens[current].numLine, 0, tokens[current].sourceCode), "Expected expression.");
         return new LiteralExpr<object>(null);
     }
 
